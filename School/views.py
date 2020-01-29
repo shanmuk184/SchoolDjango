@@ -18,6 +18,10 @@ def create_class(request):
     cls = Class.objects.get_or_create(name=class_name)
     school.classes.add(cls[0].id)
     return JsonResponse([cls.name for cls in school.classes.all()], safe=False)
+
+def teachers_list(request):
+    teachers = Teacher.objects.all()
+
 #
 # def get_teachers(request):
 #     teachers =
