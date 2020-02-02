@@ -7,11 +7,6 @@ class Subject(models.Model):
 
 class User(models.Model):
     name = models.CharField(max_length=64)
-
-class Class(models.Model):
-    name = models.CharField(max_length=64)
-
-
 class School(models.Model):
     '''
         subjects
@@ -25,6 +20,11 @@ class School(models.Model):
     # subject = models.ManyToManyField(Subject, through='SubjectMapping', through_fields=('school', 'subject'))
     # teacher = models.ManyToManyField(User, through='Teacher', through_fields=('school', 'user'), related_name='teachers')
     # classe = models.ManyToManyField(Class, through='ClassMapping', through_fields=('school', 'class_id'))
+
+
+class Class(models.Model):
+    name = models.CharField(max_length=64)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 class Teacher(models.Model):
     class Answer(models.IntegerChoices):
@@ -40,13 +40,13 @@ class Teacher(models.Model):
 class ClassMapping(models.Model):
     class_id = models.ForeignKey(Class, on_delete=models.CASCADE)
     school = models.ForeignKey('School', on_delete=models.CASCADE)
-    subject = models.ManyToManyField(Subject, through='SubjectMapping', through_fields=('class_id', 'subject'))
-    student = models.ManyToManyField(User, through='Student', through_fields=('cls', 'user'))
+    # subject = models.ManyToManyField(Subject, through='SubjectMapping', through_fields=('class_id', 'subject'))
+    # student = models.ManyToManyField(User, through='Student', through_fields=('cls', 'user'))
 
 
 class SubjectMapping(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    class_id =    models.ForeignKey(ClassMapping, on_delete=models.CASCADE, name='class', related_name='classes')
+    class_id =    models.ForeignKey(Class, on_delete=models.CASCADE, name='class', related_name='classes')
     per_class_duration = models.IntegerField()
     totalDuration = models.IntegerField()
     taught_by = models.ForeignKey(Teacher, on_delete=models.CASCADE)
@@ -57,6 +57,6 @@ class Student(models.Model):
     standard = models.IntegerField()
     roll_num = models.IntegerField()
     ranking = models.IntegerField()
-    cls = models.ForeignKey(ClassMapping, on_delete=models.CASCADE, related_name='students')
+    cls = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='students')
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

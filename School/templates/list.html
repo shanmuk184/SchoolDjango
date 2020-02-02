@@ -1,0 +1,7 @@
+
+
+<ul>
+{% for item in school_options %}
+    <li><a href="{% url item.red_url %}">{{ item.name }}</li>
+{% endfor %}
+</ul>
