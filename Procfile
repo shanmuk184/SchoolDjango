@@ -1,1 +1,1 @@
-web: sudo gunicorn DjangoSchool.wsgi
+web: gunicorn DjangoSchool.wsgi
