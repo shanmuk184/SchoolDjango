@@ -5,7 +5,7 @@ from .models import School, Class, Teacher
 from django.http import HttpResponse
 from django.template import loader
 from .options import school_options, class_options, student_options
-from .forms import SchoolForm, ClassForm, StudentForm, SubjectForm
+from .forms import SchoolForm, ClassForm, StudentForm, SubjectForm, TeacherSearchForm
 from .helpers import ModelHelper
 # Create your views here.
 
@@ -149,6 +149,20 @@ def get_total_duration_of_subject_teachers_more_than_one(request):
     }
     template = loader.get_template('subject.html')
     return HttpResponse(template.render(context, request))
+
+def getStudentDetailsBasedOnTeacherDetails(request):
+    form = TeacherSearchForm()
+    context = {'form':form, 'redirect': '/studentsearch', 'submit':'Get students'}
+    template = loader.get_template('studentsearch.html')
+    if request.method == 'POST':
+        form = TeacherSearchForm(request.POST)
+        if form.is_valid():
+            students =  helper.search_students_basedon_teacher_name(form.cleaned_data['name'])
+            context['students'] = students
+
+    return HttpResponse(template.render(context, request))
+
+
 
 
 #

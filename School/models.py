@@ -47,12 +47,9 @@ class ClassManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().select_related('cls__school', 'subject', 'taught_by__user').filter(cls__school_id=1)
 
-
-
 class Class(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='classes')
     cls = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
-
     taught_by = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     manager = ClassManager()
     def __str__(self):

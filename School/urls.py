@@ -14,5 +14,6 @@ urlpatterns=[
     path('api/school/classes', schoolclassesandsubjects, name='school_classes_subjects_api'),
     path('school/classes', tableSchoolclassesandsubjects, name='school_classes_subjects'),
     path('api/teacher/high', getNoOfStudentsTaughtByTeachersEarningMoreThanOne, name='getNoOfStudentsTaughtByTeachersEarningMoreThanOne'),
-    path('api/subjects/taught', get_total_duration_of_subject_teachers_more_than_one, name ='get_total_duration_of_subject_teachers_more_than_one')
+    path('api/subjects/taught', get_total_duration_of_subject_teachers_more_than_one, name ='get_total_duration_of_subject_teachers_more_than_one'),
+    path('studentsearch', getStudentDetailsBasedOnTeacherDetails, name="getStudentDetailsBasedOnTeacherDetails")
 ]

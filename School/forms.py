@@ -1,5 +1,5 @@
 from django import forms
-from .models import School, Student, Class
+from .models import School, Student, Class, User
 from django.utils.translation import gettext_lazy as _
 
 
@@ -39,4 +39,9 @@ class SubjectForm(forms.ModelForm):
         }
 
 class TeacherSearchForm(forms.ModelForm):
-    teacher_name = forms.CharField(name='Teacher name')
+    class Meta:
+        model = User
+        fields = ['name']
+        labels = {
+            'name': _('Teacher Name'),
+        }

@@ -12,7 +12,7 @@ class ModelHelper(object):
 
     # def serialize_plain_queryset()
     def search_students_basedon_teacher_name(self, teacher_name='Turing'):
-        students = Student.manager.filter(cls__taught_by__user__name=teacher_name).values()
+        students = Student.manager.filter(cls__taught_by__user__name=teacher_name).distinct()
         return list(students)
 
     def get_num_students_and_sum_of_teachers_with_salary_gt_twelve(self, salary_limit = 12.0):
@@ -32,9 +32,16 @@ class ModelHelper(object):
              WHERE School_teacher.salary_per_annum > """+str(salary_limit))
             return cursor.fetchone()
 
+
+
     def get_total_duration_of_subject_teachers_more_than_one(self, salary_limit = 12.0):
+        '''
+        Right now I am printing subject details
+
+        '''
         return list( Subject.manager.all().annotate(
             teacher_count = Count('teachers', distinct=True),
             student_count = Count('classes__students__id', distinct=True),
             class_count=Count('classes', distinct=True))
             .filter(teacher_count__gt=1).values())
+

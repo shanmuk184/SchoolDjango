@@ -31,6 +31,9 @@
     <div id="title" class="container">
         {% block content %}{% endblock %}
     </div>
+    <div id="searchResults" class="container">
+        {% block newContent %}{% endblock %}
+    </div>
     <div id="options" class="container" >
         <ul>
             {% for item in options %}
