@@ -40,7 +40,7 @@ def process_entities(entities):
             subject_ents = ents[0].split(', ')
             for subject in subject_ents:
                 if not subject_map.get(subject):
-                    subject_map[subject] = Subject.objects.get_or_create(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)[0]
+                    subject_map[subject] = Subject.manager.get_or_create(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)[0]
                 subjects.append(subject_map[subject])
             subjects_tu[1] = True
             salary[0] = True
