@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block content %}
+<table style="width:100%">
+    <tr>
+        <th>Suject Name</th>
+        <th>Teacher Count</th>
+        <th>Class Count</th>
+        <th>Student Count</th>
+        <th>Total Duration  per class in min</th>
+  </tr>
+    {% for entry in entries %}
+        <tr>
+            <td>{{entry.name}}</td>
+            <td>{{entry.teacher_count}}</td>
+            <td>{{entry.class_count}}</td>
+            <td>{{entry.student_count}}</td>
+            <td>{{entry.totalDuration}}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

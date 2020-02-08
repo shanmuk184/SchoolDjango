@@ -10,17 +10,19 @@ Trump: DOJ: 1 Aug 2017 | Subjects: Political Science, Business Administration, F
 Swaraj: DOJ: 1 Sept 2019 | Subjects: Foreign Affairs, Negotiations | Salary: 28 LPA in hand | Also takes Web lectures.
 Socrates: DOJ: 1 June 2015 | Subjects: Philosophy, Moral Science | Salary: 11.5 LPA in hand | Also takes Web lectures.
 """
-per_class_duration_in_hour = 1
-total_classes = 100
-total_class_duration_in_min = per_class_duration_in_hour * total_classes
+per_class_duration_in_min = 60
+total_classes = 60
+total_class_duration_in_min = per_class_duration_in_min * total_classes
 date_mapping = {'Aug':8, 'Jan':1, 'Mar':3,'Feb':2,  'June':6, 'Sept':9}
 subject_map = {}
 def process_entities(entities):
+    school_id = 1
     doj = [False, False]
     salary = [False, False]
     subjects_tu = [False, False]
     subjects = []
-    teacher = Teacher()
+    teacher = Teacher(school_id=1)
+    # teacher.school = school_id
     for (index, entity) in enumerate(entities):
         print(entity, end=' ')
         print(index)
@@ -38,7 +40,7 @@ def process_entities(entities):
             subject_ents = ents[0].split(', ')
             for subject in subject_ents:
                 if not subject_map.get(subject):
-                    subject_map[subject] = Subject.objects.get_or_create(name=subject)[0]
+                    subject_map[subject] = Subject.objects.get_or_create(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)[0]
                 subjects.append(subject_map[subject])
             subjects_tu[1] = True
             salary[0] = True
@@ -56,7 +58,6 @@ def process_entities(entities):
             doj[1] = True
 
         if entity == 'DOJ':
-
             doj[0] = True
         if doj[1] and subjects_tu[1] and salary[1]:
             teacher.web_lecture_capability = teacher.Answer.YES
@@ -66,7 +67,7 @@ def run():
     mathTrack = []
     tracks = []
     print(len(lines))
-    school = School.objects.get(name='django')
+
     # print(lines)
     for line in lines:
         print(line)
@@ -74,7 +75,7 @@ def run():
 
         teachers = []
         (teacher, subjects) = process_entities(entities)
-        teacher.school = school
+
         teacher.save()
         teacher.subjects.add(*subjects)
         print(teacher)

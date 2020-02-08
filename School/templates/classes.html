@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+{% block content %}
+<table style="width:100%">
+    <tr>
+        <th>Class Name</th>
+        <th>Teacher</th>
+        <th>Subject</th>
+  </tr>
+    {% for entry in entries %}
+        <tr>
+            <td>{{entry.cls.name}}</td>
+            <td>{{entry.taught_by.user.name}}</td>
+            <td>{{entry.subject.name}}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}
