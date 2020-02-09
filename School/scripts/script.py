@@ -1,5 +1,5 @@
 import datetime
-from ..models import Teacher, Subject, School, User
+from ..models import Teacher, Subject, User, ClassRoom
 data = """Turing: DOJ: 22 Aug 2017 | Subjects: Math, English | Salary: 18 LPA in hand | Also takes Web lectures.
 Dinho: DOJ: 1 Jan 2016 | Subjects: Sports, Health Science | Salary: 25 LPA in hand
 Adele: DOJ: 1 Mar 2015 | Subjects: English | Salary: 10 LPA in hand
@@ -21,13 +21,18 @@ def process_entities(entities):
     salary = [False, False]
     subjects_tu = [False, False]
     subjects = []
-    teacher = Teacher(school_id=1)
+
+    teacher = Teacher()
+
+    classes = []
     # teacher.school = school_id
+    # print(subject_map)
     for (index, entity) in enumerate(entities):
-        print(entity, end=' ')
-        print(index)
+        # print(entity, end=' ')
+        # print(index)
         if index == 0:
-            user = User(name=entity)
+            user = User()
+            user.name = entity
             user.save()
             teacher.user = user
         if salary[0] and not salary[1]:
@@ -39,9 +44,8 @@ def process_entities(entities):
             ents = entity.split(' | ')
             subject_ents = ents[0].split(', ')
             for subject in subject_ents:
-                if not subject_map.get(subject):
-                    subject_map[subject] = Subject.manager.get_or_create(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)[0]
-                subjects.append(subject_map[subject])
+                subject_map_obj = Subject(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)
+                subjects.append(subject_map_obj)
             subjects_tu[1] = True
             salary[0] = True
 
@@ -61,21 +65,38 @@ def process_entities(entities):
             doj[0] = True
         if doj[1] and subjects_tu[1] and salary[1]:
             teacher.web_lecture_capability = teacher.Answer.YES
+
     return (teacher, subjects)
 def run():
     lines = data.split('\n')
     mathTrack = []
     tracks = []
-    print(len(lines))
-
+    # print(len(lines))
+    subjec = []
+    teachers = []
     # print(lines)
+    class_room = ClassRoom.objects.create(name='class 1')
+    classes_added = 0
+    class_room_index = 1
     for line in lines:
-        print(line)
-        entities = line.split(': ')
+        # print(line)
+        if line.strip():
+            entities = line.split(': ')
+            (teacher, subjects) = process_entities(entities)
+            teacher.save()
+            # teachers.append(teacher)
+            for subject in subjects:
+                # print(class_room)
+                # print(classes_added)
+                subject.teacher = teacher
+                subject.cls = class_room
+                classes_added += 1
+                subjec.append(subject)
 
-        teachers = []
-        (teacher, subjects) = process_entities(entities)
-
-        teacher.save()
-        teacher.subjects.add(*subjects)
-        print(teacher)
+                if classes_added == 4:
+                    class_room_index += 1
+                    classes_added = 0
+                    class_room = ClassRoom.objects.create(name='Class ' + str(class_room_index))
+    # print(subjec)
+    Subject.manager.bulk_create(subjec)
+    # Teacher.objects.bulk_create(teachers)

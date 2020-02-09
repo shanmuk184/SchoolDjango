@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.forms import model_to_dict
-from .models import School, Class, Teacher
+from .models import Teacher
 from django.http import HttpResponse
 from django.template import loader
 from .options import school_options, class_options, student_options
