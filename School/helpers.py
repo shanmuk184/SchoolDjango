@@ -19,7 +19,7 @@ class ModelHelper(object):
         """
         Django aggregation uses joins instead of subquery.
          So double aggregation fails and gives unexpected value.
-         This is wirking with sqlite perfectly. But heroku is giving me trouble.
+         This is working with sqlite perfectly. But heroku is giving me trouble.
         """
         with connection.cursor() as cursor:
             cursor.execute("""SELECT SUM(salary_per_annum), num_students.num_students FROM
@@ -30,7 +30,8 @@ class ModelHelper(object):
              AND "School_subjectmapping".teacher_id = "School_teacher".id
              AND "School_teacher".salary_per_annum > """+str(salary_limit)+
              """) as num_students, "School_teacher"
-             WHERE "School_teacher".salary_per_annum > """+str(salary_limit))
+             WHERE "School_teacher".salary_per_annum > """+str(salary_limit)+
+            """GROUP BY num_students, salary_per_annum""")
             return cursor.fetchone()
 
 
