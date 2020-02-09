@@ -18,18 +18,19 @@ class ModelHelper(object):
     def get_num_students_and_sum_of_teachers_with_salary_gt_twelve(self, salary_limit = 12.0):
         """
         Django aggregation uses joins instead of subquery.
-         So double aggregation fails and gives unexpected value
+         So double aggregation fails and gives unexpected value.
+         This is wirking with sqlite perfectly. But heroku is giving me trouble.
         """
         with connection.cursor() as cursor:
             cursor.execute("""SELECT SUM(salary_per_annum), num_students FROM
-            (SELECT COUNT(DISTINCT School_student.id) AS num_students
-             FROM School_student, School_classroom, School_subjectmapping, School_teacher
-             WHERE School_subjectmapping.cls_id == School_classroom.id
-             AND School_student.cls_id == School_classroom.id
-             AND School_subjectmapping.teacher_id == School_teacher.id
-             AND School_teacher.salary_per_annum > """+str(salary_limit)+
-             """) as num_students, School_teacher
-             WHERE School_teacher.salary_per_annum > """+str(salary_limit))
+            (SELECT COUNT(DISTINCT "School_student".id) AS num_students
+             FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
+             WHERE "School_subjectmapping".cls_id == "School_classroom".id
+             AND "School_student".cls_id == "School_classroom".id
+             AND "School_subjectmapping".teacher_id == "School_teacher".id
+             AND "School_teacher".salary_per_annum > """+str(salary_limit)+
+             """) as num_students, "School_teacher"
+             WHERE "School_teacher".salary_per_annum > """+str(salary_limit))
             return cursor.fetchone()
 
 
