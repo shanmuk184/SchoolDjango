@@ -22,7 +22,7 @@ class ModelHelper(object):
          This is wirking with sqlite perfectly. But heroku is giving me trouble.
         """
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT SUM(salary_per_annum), num_students FROM
+            cursor.execute("""SELECT SUM(salary_per_annum), num_students.num_students FROM
             (SELECT COUNT(DISTINCT "School_student".id) AS num_students
              FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
              WHERE "School_subjectmapping".cls_id = "School_classroom".id
