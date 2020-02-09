@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class ClassManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().select_related('teacher','cls')
+        return super().get_queryset().select_related('teacher', 'cls', 'subject')
 
 class StudentManager(models.Manager):
     def get_queryset(self):

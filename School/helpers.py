@@ -8,7 +8,7 @@ class ModelHelper(object):
         Since School filtering is done inside manager, Leaving school_id for now.
         Tabular preview of the classroom, subjects being taught in those classrooms, teachers using the same.
         '''
-        return SubjectMapping.objects.all()
+        return SubjectMapping.manager.all()
 
     # def serialize_plain_queryset()
     def search_students_basedon_teacher_name(self, teacher_name='Turing'):
@@ -22,7 +22,7 @@ class ModelHelper(object):
          This is working with sqlite perfectly. But heroku is giving me trouble.
         """
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT SUM(salary_per_annum) ,SUM(num_students.num_students) / COUNT(num_students.num_students) FROM
+            cursor.execute("""SELECT SUM(salary_per_annum) ,CEIL(CAST(SUM(num_students.num_students) as decimal) / COUNT(num_students.num_students)) FROM
             (SELECT COUNT(DISTINCT "School_student".id) AS num_students
              FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
              WHERE "School_subjectmapping".cls_id = "School_classroom".id

@@ -31,7 +31,7 @@ class SubjectMapping(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='classes')
     cls = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, related_name='subjects')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='classes')
-
+    manager = ClassManager()
     def __str__(self):
         return "%s (%s)" % (
             self.subject.name,
