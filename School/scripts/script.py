@@ -1,5 +1,5 @@
 import datetime
-from ..models import Teacher, Subject, User, ClassRoom
+from ..models import Teacher, Subject, User, ClassRoom, SubjectMapping
 data = """Turing: DOJ: 22 Aug 2017 | Subjects: Math, English | Salary: 18 LPA in hand | Also takes Web lectures.
 Dinho: DOJ: 1 Jan 2016 | Subjects: Sports, Health Science | Salary: 25 LPA in hand
 Adele: DOJ: 1 Mar 2015 | Subjects: English | Salary: 10 LPA in hand
@@ -31,10 +31,10 @@ def process_entities(entities):
         # print(entity, end=' ')
         # print(index)
         if index == 0:
-            user = User()
-            user.name = entity
-            user.save()
-            teacher.user = user
+            # user = User()
+            # user.name = entity
+            # user.save()
+            teacher.name = entity
         if salary[0] and not salary[1]:
             salary_parts = entity.split(' ')
             teacher.salary_per_annum = float(salary_parts[0])
@@ -44,7 +44,7 @@ def process_entities(entities):
             ents = entity.split(' | ')
             subject_ents = ents[0].split(', ')
             for subject in subject_ents:
-                subject_map_obj = Subject(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)
+                subject_map_obj = Subject.objects.get_or_create(name=subject, per_class_duration=per_class_duration_in_min, totalDuration=total_class_duration_in_min)[0]
                 subjects.append(subject_map_obj)
             subjects_tu[1] = True
             salary[0] = True
@@ -88,8 +88,14 @@ def run():
             for subject in subjects:
                 # print(class_room)
                 # print(classes_added)
-                subject.teacher = teacher
-                subject.cls = class_room
+                # subject.teacher = teacher
+                # subject.save()
+                subjectMap = SubjectMapping()
+                subjectMap.cls = class_room
+                subjectMap.subject = subject
+                subjectMap.teacher = teacher
+                # subject.cls = class_room
+                subjectMap.save()
                 classes_added += 1
                 subjec.append(subject)
 
@@ -98,5 +104,5 @@ def run():
                     classes_added = 0
                     class_room = ClassRoom.objects.create(name='Class ' + str(class_room_index))
     # print(subjec)
-    Subject.manager.bulk_create(subjec)
+    # Subject.manager.bulk_create(subjec)
     # Teacher.objects.bulk_create(teachers)

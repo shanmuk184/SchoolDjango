@@ -41,7 +41,7 @@ class SubjectForm(forms.ModelForm):
 class TeacherSearchForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['user']
+        fields = ['name']
         labels = {
             'name': _('Teacher Name'),
         }

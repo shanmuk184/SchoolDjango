@@ -10,4 +10,4 @@ class ClassManager(models.Manager):
 
 class StudentManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().select_related('user')
+        return super().get_queryset().select_related('cls')

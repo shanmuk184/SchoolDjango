@@ -8,8 +8,8 @@
   </tr>
     {% for entry in entries %}
         <tr>
-            <td>{{entry.name}}</td>
-            <td>{{entry.subject.teacher.name}}</td>
+            <td>{{entry.cls.name}}</td>
+            <td>{{entry.teacher.name}}</td>
             <td>{{entry.subject.name}}</td>
         </tr>
     {% endfor %}

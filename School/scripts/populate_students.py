@@ -34,10 +34,10 @@ def create_students(standard, classes, student_index):
     for i in range(student_count):
         student = Student()
         student.doj = datetime.date(1970, 1, 1)
-        user = User()
-        user.name = 'Student '+str(current_index)
-        user.save()
-        student.user = user
+        # user = User()
+        # user.name = 'Student '+str(current_index)
+        # user.save()
+        student.name = 'Student '+str(current_index)
         student.ranking = i
         student.roll_num = i
         student.standard = standard
