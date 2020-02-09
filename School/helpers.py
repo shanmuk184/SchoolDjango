@@ -19,19 +19,30 @@ class ModelHelper(object):
         """
         Django aggregation uses joins instead of subquery.
          So double aggregation fails and gives unexpected value.
-         This is working with sqlite perfectly. But heroku is giving me trouble.
+         This Will only with sqlite perfectly. But heroku is giving me trouble.
         """
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT SUM(salary_per_annum) ,CEIL(CAST(SUM(num_students.num_students) as decimal) / COUNT(num_students.num_students)) FROM
-            (SELECT COUNT(DISTINCT "School_student".id) AS num_students
-             FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
-             WHERE "School_subjectmapping".cls_id = "School_classroom".id
-             AND "School_student".cls_id = "School_classroom".id
-             AND "School_subjectmapping".teacher_id = "School_teacher".id
-             AND "School_teacher".salary_per_annum > """+str(salary_limit)+
-             """) as num_students, "School_teacher"
-             WHERE "School_teacher".salary_per_annum > """+str(salary_limit))
-
+            try:
+                cursor.execute("""SELECT SUM(salary_per_annum) ,CEIL(CAST(SUM(num_students.num_students) as decimal) / COUNT(num_students.num_students)) FROM
+                (SELECT COUNT(DISTINCT "School_student".id) AS num_students
+                 FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
+                 WHERE "School_subjectmapping".cls_id = "School_classroom".id
+                 AND "School_student".cls_id = "School_classroom".id
+                 AND "School_subjectmapping".teacher_id = "School_teacher".id
+                 AND "School_teacher".salary_per_annum > """+str(salary_limit)+
+                 """) as num_students, "School_teacher"
+                 WHERE "School_teacher".salary_per_annum > """+str(salary_limit))
+            except Exception as e:
+                if str(e) == 'no such function: CEIL':
+                    cursor.execute("""SELECT SUM(salary_per_annum) , num_students.num_students FROM
+                                    (SELECT COUNT(DISTINCT "School_student".id) AS num_students
+                                     FROM "School_student", "School_classroom", "School_subjectmapping", "School_teacher"
+                                     WHERE "School_subjectmapping".cls_id = "School_classroom".id
+                                     AND "School_student".cls_id = "School_classroom".id
+                                     AND "School_subjectmapping".teacher_id = "School_teacher".id
+                                     AND "School_teacher".salary_per_annum > """ + str(salary_limit) +
+                                   """) as num_students, "School_teacher"
+                                   WHERE "School_teacher".salary_per_annum > """ + str(salary_limit))
             return cursor.fetchone()
 
 

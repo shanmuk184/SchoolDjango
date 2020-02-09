@@ -2,3 +2,11 @@
 {% block content %}
 <h2>You entered class page</h2>
 {% endblock %}
+
+{% block options %}
+<ul>
+            {% for item in options %}
+                <li><a href="{% url item.red_url %}">{{ item.name }}</li>
+            {% endfor %}
+        </ul>
+{% endblock %}

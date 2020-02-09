@@ -1,5 +1,5 @@
 school_options = [{'name':'Create School', 'red_url':'create_school'}]
-class_options = [{'name':'Create Class', 'red_url':'create_class'},
+class_options = [
                  {'name':'Get classes', 'red_url':'school_classes_subjects'},
                  {'name':'Classes Taught by Teachers earning more than one lakh', 'red_url':'getNoOfStudentsTaughtByTeachersEarningMoreThanOne'},
                  {'name': 'Subjects Taught by more than one Teachers',
